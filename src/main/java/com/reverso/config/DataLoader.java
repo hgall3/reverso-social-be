@@ -33,28 +33,31 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createDefaultUsers() {
+        // Configuramos tu email personal para el ADMIN
+        String adminEmail = "gagallegosanda@gmail.com";
 
-        userRepository.findByEmail("admin@reversosocial.com").ifPresentOrElse(
+        userRepository.findByEmail(adminEmail).ifPresentOrElse(
                 user -> {
                     user.setPassword(passwordEncoder.encode(adminPassword));
                     userRepository.save(user);
-                    log.info("Usuario ADMIN actualizado con contraseña del entorno");
+                    log.info("Usuario ADMIN ({}) actualizado con contraseña del entorno", adminEmail);
                 },
                 () -> {
                     User admin = User.builder()
-                            .fullName("Equipo Reverso Social")
-                            .email("admin@reversosocial.com")
+                            .fullName("Gabi Gallegos - Admin")
+                            .email(adminEmail)
                             .password(passwordEncoder.encode(adminPassword))
-                            .phone("+34 900 000 000")
+                            .phone("+34 600 000 000")
                             .companyName("Reverso Social")
                             .role(Role.ADMIN)
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
                             .build();
                     userRepository.save(admin);
-                    log.info("Usuario ADMIN creado");
+                    log.info("Usuario ADMIN ({}) creado exitosamente", adminEmail);
                 });
 
+        // Mantenemos el editor genérico o cámbialo si lo prefieres
         userRepository.findByEmail("editor@reversosocial.com").ifPresentOrElse(
                 user -> {
                     user.setPassword(passwordEncoder.encode(editorPassword));
